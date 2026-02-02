@@ -3,7 +3,7 @@
 
 <br>
 <p align="left">
-  <img src="assets/MergePRAG.jpg" alt="MergePRAG Architecture" width="350">
+  <img src="assets/MergePRAG.jpg" alt="MergePRAG Architecture" width="750">
 </p>
 <p align="left">
   <em>Figure. Transformer Architecture</em>
