@@ -17,5 +17,5 @@ This implementation is based on the following paper authored by the **UNIST NLP 
 > **MergePRAG: Orthogonal Merging of Passage-experts for Multi-hop Parametric RAG**  
 > *Submitted to the International Conference on Learning Representations (ICLR) 2026*
 
-arXiv / OpenReview: https://openreview.net/forum?id=FSL1J2gmJV
+arXiv : https://openreview.net/forum?id=FSL1J2gmJV
 <br>
