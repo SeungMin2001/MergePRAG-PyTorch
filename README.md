@@ -10,7 +10,6 @@ presented in the original research.
   <img src="assets/MergePRAG.jpg" alt="MergePRAG Architecture" width="750">
 </p>
 <p align="left">
-  <em>Figure. MergePRAG Architecture</em>
 </p>
 
 ## Paper Reference
