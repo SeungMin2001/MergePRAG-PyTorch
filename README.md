@@ -1,6 +1,9 @@
 # MergePRAG (PyTorch)
-> A PyTorch implementation of the Transformer built from scratch, based on **MergePRAG**.  
-> This repository implements the **MergePRAG** framework proposed by the **UNIST NLP Lab**.
+> A from-scratch PyTorch implementation of the Transformer based on
+the MergePRAG framework proposed in a paper by the UNIST NLP Lab.
+
+> This repository aims to reproduce and explore the core ideas and architecture
+presented in the original research.
 
 <br>
 <p align="left">
