@@ -117,8 +117,8 @@ for k in valid:
 > 이제 Reasoning Chain을 해줘야함. <br>
 > 여기서 Decomposition 개념이 들어감. 즉 분리 <br>
 > 논문 코드에서는 Decomposer 모델을 학습을 시켜서 sub question, sub answer를 만들고있음. <br>
-> 따라서 나도 LLM을 활용하여 Decomposer모델을 생성,학습해야함. <br>
-> 그러므로 HyperNetwork 이전 Decomposer모델링을 먼저 진행함 <br>
+
+> Decomposer 모델의 역할과 ai api의 역할이 비슷하다고 봄. 논문 특성상 외부 api를 아키텍처에 포함시키지 못하기 때문에 별도의 로컬 모델링을 했다고 생각함. 구현편의상 나는 api를 바로 사용할 계획
 
 ```py
 ```
