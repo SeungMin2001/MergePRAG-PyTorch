@@ -148,7 +148,13 @@ for k in valid:
 
 > 여기서 Attentive pooling에 쓰이는 X는 backbone model encoding을 통해 임베딩된 애를 칭하는것
 
-> 즉 미리 구현했던 transformer의 encoder를 활용하여 passage를 임베딩하는 작업 필요. 
+> 즉 미리 구현했던 transformer의 encoder를 활용하여 passage를 임베딩하는 작업 필요.
+
+> in paper, "... from an auxiliary Transformer encoder", 이때 auxiliary 라는 단어때문에, <br> encoder와 inject into critical layer의 대상인 모델은 별도의 모델이라는것을 유추해볼수 있음.
+
+> 이번 구현에서는 reasoning chain passage를 encoding하는 모델과 critical layer에 inject하는 모델은 서로 분리되어야함.
+
+>  따라서 2개의 transformer를 설정하고 시작해야함.
 
 ```py
 ```
