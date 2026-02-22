@@ -135,7 +135,7 @@ for k in valid:
 </p>
 <p align="left">
 </p>
-<em>Figure : Overview of MergePRAG for multi hop QA.</em>
+<em>Figure : Overview of HyperNetwork Architecture.</em>
 
 
 
