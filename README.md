@@ -122,6 +122,24 @@ for k in valid:
 
 > 논문 코드에서는 chain, 즉 시계열적 순서도 llm을 통한 학습으로 진행된다. 따라서 하위질문,하위답변, 시계열적 논리순서 모두 llm을 사용하여 새로운 데이터셋을 만들어야한다.
 
+##### find critical layer 
+> 현재 critical layer를 찾으려면 inject 해보면서 변화들을 관찰할 필요가 있는데
+
+> 그럴려면 hypernetwork를 먼저 만들어줘야 가능함.
+
+##### HyperNetwork 
+
+<br>
+<p align="left">
+  <img src="assets/HyperNetwork.jpg" alt="HyperNetwork Architecture" width="750">
+</p>
+<p align="left">
+</p>
+<em>Figure : Overview of MergePRAG for multi hop QA.</em>
+
+
+
 ```py
 ```
+
 ... ing
