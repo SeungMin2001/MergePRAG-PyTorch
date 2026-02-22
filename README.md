@@ -122,6 +122,8 @@ for k in valid:
 
 > 논문 코드에서는 chain, 즉 시계열적 순서도 llm을 통한 학습으로 진행된다. 따라서 하위질문,하위답변, 시계열적 논리순서 모두 llm을 사용하여 새로운 데이터셋을 만들어야한다.
 
+> llm을 활용하여 논리순서, 하위질문, 하위답변을 포함한 재설계된 데이터셋 구축 진행.
+
 ##### find critical layer 
 > 현재 critical layer를 찾으려면 inject 해보면서 변화들을 관찰할 필요가 있는데
 
@@ -135,7 +137,7 @@ for k in valid:
 </p>
 <p align="left">
 </p>
-<em>Figure : Overview of HyperNetwork Architecture.</em>
+<em>Figure : Overview of HyperNetwork Architecture.</em> <br>
 
 
 
