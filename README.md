@@ -137,9 +137,14 @@ for k in valid:
 </p>
 <p align="left">
 </p>
-<em>Figure : Overview of HyperNetwork Architecture.</em> <br>
 
+<em>Figure : Overview of HyperNetwork Architecture.</em> 
 
+<br>
+
+> 데이터셋에 들어있는 passage들을 memory Key,Value로 변환해주는 네트워크임.
+
+> Critical Layer 에 Inject할때 attention 연산을 위한 준비과정.
 
 ```py
 ```
