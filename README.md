@@ -146,6 +146,10 @@ for k in valid:
 
 > Critical Layer 에 Inject할때 attention 연산을 위한 준비과정.
 
+> 여기서 Attentive pooling에 쓰이는 X는 backbone model encoding을 통해 임베딩된 애를 칭하는것
+
+> 즉 미리 구현했던 transformer의 encoder를 활용하여 passage를 임베딩하는 작업 필요. 
+
 ```py
 ```
 
