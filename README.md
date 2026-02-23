@@ -25,7 +25,7 @@ paper : https://openreview.net/forum?id=FSL1J2gmJV
 
 <br>
 
-# STEP 1. Preparation dataset and Find "critical layer"
+# STEP 1. Preparation dataset 
 > Unlike the original paper, the base LLM used here is a basic Transformer implemented from scratch, following the architecture proposed in “Attention Is All You Need.”
 
 ```py
@@ -182,5 +182,31 @@ def passage_embedding(data):
 > 기존 Transformer encoder의 class 그대로 사용하여 passage를 embedding해줌.
 
 > 이때 shape=(750,5,512)
+
+# STEP 2. HyperNetwork
+
+> 현재 shape => (B,T,d_model). 하지만 이걸 (B,d_model)로 바꿔줘야함.
+
+> 즉 750개의 fact가 있고 하나의 fact마다 최대 5개의 토큰이 있고 임베딩하여 d_model 임베딩한다 인데,
+
+> fact 하나당 하나의 d_model 임베딩벡터를 할당해줘야한다. 즉 (B,d_model) 로
+
+> 이부분이 약간 헷갈리는데, 만약 750개중 하나의 fact가 5개의 token을 가지고있다고 가정하면,
+- h₁ ∈ ℝ⁵¹²
+- h₂ ∈ ℝ⁵¹²
+- h₃ ∈ ℝ⁵¹²
+- h₄ ∈ ℝ⁵¹²
+- h₅ ∈ ℝ⁵¹²
+> 이렇게 나열해볼수 있고, 이때 이 5개의 임베딩된 토큰을 하나의 임베딩벡터로 "polling" 해주게 되면 하나의 fact의 하나의 임베딩벡터가 할당된다.
+
+> 논문에서는 이 polling을 "attentive pooling"로 정의했음.
+### Attentive pooling
+
+과정을 순서대로 써내려가보자면,
+1. transformer encoder를 통과한 벡터를 H라 하면, H ∈ ℝ^(B * T * d_model)
+2. 각 토큰에 대해 스칼라 attention score 계산.
+3. 정규화
+4. 가중합을 통해 embedding 생성.
+5. 이렇게 나온 벡터 H는, H ∈ ℝ^(B * d_model) 이때 B=fact, d_model=512 (by transformer)
 
 ... ing
