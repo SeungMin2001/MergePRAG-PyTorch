@@ -262,6 +262,9 @@ class ScoreLayer(nn.Module):
 
 > 따라서 최종적으로 나오는 벡터 h의 차원은 B*d가 되는거임. 
 
+### MLP
+논문 내용에 따르면 수식은 아래와 같다.
+hb = MLPhyp(h)​ = ReLU(V′ * LayerNorm(ReLU(W′h)))
 
 
 
