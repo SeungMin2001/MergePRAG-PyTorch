@@ -144,10 +144,6 @@ for k in valid:
 
 > 데이터셋에 들어있는 passage들을 memory Key,Value로 변환해주는 네트워크임.
 
-> Critical Layer 에 Inject할때 attention 연산을 위한 준비과정.
-
-> 여기서 Attentive pooling에 쓰이는 X는 backbone model encoding을 통해 임베딩된 애를 칭하는것
-
 > 즉 미리 구현했던 transformer의 encoder를 활용하여 passage를 임베딩하는 작업 필요.
 
 > in paper, "... from an auxiliary Transformer encoder", 이때 auxiliary 라는 단어때문에, <br> encoder와 inject into critical layer의 대상인 모델은 별도의 모델이라는것을 유추해볼수 있음.
@@ -157,6 +153,34 @@ for k in valid:
 >  따라서 2개의 transformer를 설정하고 시작해야함.
 
 ```py
+def passage_embedding(data):
+
+  loader = DataLoader(data, batch_size=125, shuffle=True, collate_fn=collate_facts)
+
+  attention=Attention(64,64,512)
+  ffw=FeedForward(512,1024)
+  embedding_facts=TokenEmbedding(tokenizer.vocab_size,512) #token
+
+  for batch in loader:
+    input_ids=batch["input_ids"]
+    attention_mask=batch["attention_mask"]
+    #print(input_ids)
+    encoding_facts=embedding_facts.embedding(input_ids) #embedding in encoding
+    encoding_facts=embedding_facts.positional_encoding(encoding_facts) #token,embedding,positional in encoding
+
+    #------------------ encoder --------------------
+    for _ in range(6): #6번 반복 nx=6
+
+      #multi-head self attention in encoding 실행
+      x=attention.forward(encoding_facts,encoding_facts,encoding_facts)
+
+      encoding_facts=ffw.forward(x) #encoding end
+
+  return encoding_facts
+
 ```
+> 기존 Transformer encoder의 class 그대로 사용하여 passage를 embedding해줌.
+
+> 이때 shape=(750,5,512)
 
 ... ing
