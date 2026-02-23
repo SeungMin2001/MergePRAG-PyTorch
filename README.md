@@ -210,7 +210,44 @@ def passage_embedding(data):
 5. 이렇게 나온 벡터 H는, H ∈ ℝ^(B * d_model) 이때 B=fact, d_model=512 (by transformer)
 
 <br>
-이제 진행해보자.
+이제 진행해보자. 논문 아키텍처에서는 ℝ가 T*d 에서 d로 바뀌는걸로 표시되있는데, 이건 하나의 passage를 기준으로 나타낸것. 즉 facts를 모아둔 B라는 차원이 생략되있음. <br>
+따라서 전체 passage를 포함하면 ℝ^(B*T*d_model)->ℝ^(B*d_model) 이 된다.
+<br>
+
+논문에서 나온 수식은 아래와 같다. <br>
+
+X=Embedding(X), S=Wa * X 일때, Emd(p)=h=softmax(S​) * X​ 
+<br>
+
+```py
+#S=WaX
+import torch
+import torch.nn as nn
+
+class ScoreLayer(nn.Module):
+  def __init__(self, d_model):
+    super().__init__()
+    self.Wa=nn.Linear(d_model,1) #토큰의 임베딩벡터 -> 1(스칼라)
+
+  def forward(self,H,mask=None):
+    #H:(B,T,d), 
+    score=self.Wa(H).squeeze(-1) #마지막차원 1 지워주기
+    if mask is not None:
+      # padding 토큰 무시하기. -무한 넣어주면 0이됨
+      score=score.masked_fill(mask==0,float('-inf'))
+    
+    # dim=1: 가로
+    alpha=torch.softmax(score,dim=1)
+
+    # alpha의 차원 하나 늘려주기. H랑 연산하려고.
+    pooled=torch.sum(alpha.unsqueeze(-1)*H,dim=1)
+
+    return pooled
+```
+
+
+
+
 
 
 ... ing
