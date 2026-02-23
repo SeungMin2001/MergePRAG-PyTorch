@@ -199,15 +199,19 @@ def passage_embedding(data):
 - h₅ ∈ ℝ⁵¹²
 > 이렇게 나열해볼수 있고, 이때 이 5개의 임베딩된 토큰을 하나의 임베딩벡터로 "polling" 해주게 되면 하나의 fact의 하나의 임베딩벡터가 할당된다.
 
-> 논문에서는 이 polling을 "attentive pooling"로 정의했음.
 ### Attentive pooling
 
-과정을 순서대로 써내려가보자면,
-1. transformer encoder를 통과한 벡터를 H라 하면, H ∈ ℝ^(B * T * d_model)
-2. 각 토큰에 대해 스칼라 attention score 계산.
-3. 정규화
-4. 가중합을 통해 embedding 생성.
-5. 이렇게 나온 벡터 H는, H ∈ ℝ^(B * d_model) 이때 B=fact, d_model=512 (by transformer)
+> 과정을 순서대로 써내려가보자면,
+
+> 1. transformer encoder를 통과한 벡터를 H라 하면, H ∈ ℝ^(B * T * d_model)
+
+> 2. 각 토큰에 대해 스칼라 attention score 계산.
+
+> 3. 정규화
+ 
+> 4. 가중합을 통해 embedding 생성.
+
+> 5. 이렇게 나온 벡터 H는, H ∈ ℝ^(B * d_model) 이때 B=fact, d_model=512 (by transformer)
 
 <br>
 이제 진행해보자. 논문 아키텍처에서는 ℝ가 T*d 에서 d로 바뀌는걸로 표시되있는데, 이건 하나의 passage를 기준으로 나타낸것. 즉 facts를 모아둔 B라는 차원이 생략되있음. <br>
