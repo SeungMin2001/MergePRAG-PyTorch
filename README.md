@@ -209,4 +209,8 @@ def passage_embedding(data):
 4. 가중합을 통해 embedding 생성.
 5. 이렇게 나온 벡터 H는, H ∈ ℝ^(B * d_model) 이때 B=fact, d_model=512 (by transformer)
 
+<br>
+이제 진행해보자.
+
+
 ... ing
