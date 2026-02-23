@@ -243,8 +243,6 @@ class ScoreLayer(nn.Module):
     pooled=torch.sum(alpha.unsqueeze(-1)*H,dim=1)
 
     return pooled
-
-즉 H에 가중치 곱하고 softmax취한다음 H에 곱해서 토큰별로 더하게되면 최종 h가 완성된다.
 ```
 > 여기서 좀 머리아팠음.
 
