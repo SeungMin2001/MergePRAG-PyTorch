@@ -304,7 +304,7 @@ class MLP(nn.Module):
 </p>
 <p align="left">
 </p>
-<em>Figure : Overview of MergePRAG for multi hop QA.</em>
+<em>Table 8: Ablation on the Number of Passage Vectors numkv.</em>
 
 
 
