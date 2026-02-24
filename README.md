@@ -292,6 +292,19 @@ class MLP(nn.Module):
 
     return res
 ```
+> 이제 MLP에서 나온 벡터를 두개의 선형변환을 통해 서로다른 2개의 벡터를 만들어줘야한다. 이때 k상수를 곱해준다.
+
+> 즉 injection할 K메모리와 V메모리를 k개 늘려줌으로써 성능향상을 도모한다. 이때 논문에서는 k=16일때 성능이 가장 좋게 나왔음을 보여주고 있다.
+
+> 물론 환경이 다르지만 k=16으로 진행하였다.
+
+<br>
+<p align="left">
+  <img src="assets/Table8.jpg" alt="Ablation on the Number of Passage Vectors numkv" width="750">
+</p>
+<p align="left">
+</p>
+<em>Figure : Overview of MergePRAG for multi hop QA.</em>
 
 
 
