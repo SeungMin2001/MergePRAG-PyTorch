@@ -323,7 +323,18 @@ class LinearProjection(nn.Module):
 ```
 > Attentive Pooling, MLP, Linear Projection을 순서대로 묶어주면 HyperNetwork(H())가 된다
 
-# STEP 3. Injection
+# STEP 3. Orthogonal Continual Merging Mechanism
+
+> 이젠 hop 안에 많은 passage들을 메모리 K,V 벡터로 변환시켜줬기 때문에, 얘네들을 직교병합 해줘야함.
+
+> 그러면 hop 하나당 K,V 각각 하나의 메모리벡터만 남게된다.
+
+> 나아가서 새로운 hop이 들어오면 동일하게 진행한뒤 hop간의 직교병합을 또 함.
+
+> hop간의 직교병합이 다 끝나면 inject 진행.
+
+ 
+
 
 
 
