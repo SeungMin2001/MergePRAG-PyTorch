@@ -305,7 +305,25 @@ class MLP(nn.Module):
 <p align="left">
 </p>
 <em>Table 8: Ablation on the Number of Passage Vectors numkv.</em>
+<br>
 
+> Linear Projection code 
+```py
+class LinearProjection(nn.Module):
+  def __init__(self,d_model,k):
+    super().__init__()
+    self.K=nn.Linear(d_model,k*d_model)
+    self.V=nn.Linear(d_model,k*d_model)
+
+  def forward(self,h):
+    res_k=self.K(h)
+    res_v=self.V(h)
+
+    return res_k,res_v
+```
+> Attentive Pooling, MLP, Linear Projection을 순서대로 묶어주면 HyperNetwork(H())가 된다
+
+# STEP 3. Injection
 
 
 
