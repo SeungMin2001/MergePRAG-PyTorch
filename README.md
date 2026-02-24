@@ -234,12 +234,12 @@ class ScoreLayer(nn.Module):
     self.Wa=nn.Linear(d_model,1) #토큰의 임베딩벡터 -> 1(스칼라)
 
   def forward(self,H,mask=None):
-    #H:(B,T,d), 
+    #H:(B,T,d),
     score=self.Wa(H).squeeze(-1) #마지막차원 1 지워주기
     if mask is not None:
       # padding 토큰 무시하기. -무한 넣어주면 0이됨
       score=score.masked_fill(mask==0,float('-inf'))
-    
+
     # dim=1: 가로
     alpha=torch.softmax(score,dim=1)
 
@@ -247,6 +247,7 @@ class ScoreLayer(nn.Module):
     pooled=torch.sum(alpha.unsqueeze(-1)*H,dim=1)
 
     return pooled
+# 여기까지 h 차원=(B,d_model)
 ```
 > 여기서 좀 머리아팠음.
 
@@ -267,8 +268,31 @@ class ScoreLayer(nn.Module):
 > 따라서 최종적으로 나오는 벡터 h의 차원은 B*d가 되는거임. 
 
 ### MLP
-논문 내용에 따르면 수식은 아래와 같다.
-hb = MLPhyp(h)​ = ReLU(V′ * LayerNorm(ReLU(W′h)))
+> 논문 내용에 따르면 수식은 아래와 같다. 
+
+> hb = MLPhyp(h)​ = ReLU(V′ * LayerNorm(ReLU(W′h)))
+
+> 선형 -> 비선형 가중치벡터로 바꿔주는 느낌
+
+```py
+class MLP(nn.Module):
+
+  def __init__(self,d_model):
+    super().__init__()
+    self.W=nn.linear(d_model,d_model)
+    self.V=nn.linear(d_model,d_model)
+    self.ln=nn.LayerNorm(d_model)
+    self.relu=nn.ReLU()
+
+
+  def forward(self,h):
+    # 논문수식을 그대로 적용. 이때 d_model은 512로 고정.
+    # 선형변환도 d_model->d_model로 설정.
+    res=self.relu(self.V(self.ln(self.relu(self.W(h)))))
+
+    return res
+```
+
 
 
 
