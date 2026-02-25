@@ -330,11 +330,11 @@ class LinearProjection(nn.Module):
 
 > hop간의 직교병합이 다 끝나면 inject 진행.
 
-##### hop 안에서의 Orthogonal Merge
+##### Orthogonal Merge
 
-일단 지금까지의 코드를 활용하여 전체뼈대 코드 작성. <br>
+> 질문당 K,V 메모리를 얻을수 있고 K,V는 각각 여러 홉을 가지고있음.
 
-> 
+>  hop간의 merge를 진행한 후 inject를 해야함.
 
 ```py
 loader = DataLoader(train, batch_size=125, shuffle=True, collate_fn=collate_facts)
@@ -368,6 +368,8 @@ for batch in loader:
   
   break
 ```
+
+
 
  
 
