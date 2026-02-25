@@ -188,7 +188,7 @@ def passage_embedding(data):
 
 > fact 하나당 하나의 d_model 임베딩벡터를 할당해줘야한다. 즉 (B,d_model) 로
 
-> 이부분이 약간 헷갈리는데, 만약 750개중 하나의 fact가 5개의 token을 가지고있다고 가정하면,
+> 이부분이 약간 헷갈리는데, 만약 fact가 5개의 token을 가지고있다고 가정하면,
 - h₁ ∈ ℝ⁵¹²
 - h₂ ∈ ℝ⁵¹²
 - h₃ ∈ ℝ⁵¹²
