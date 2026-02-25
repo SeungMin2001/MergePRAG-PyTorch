@@ -333,6 +333,43 @@ class LinearProjection(nn.Module):
 
 > hop간의 직교병합이 다 끝나면 inject 진행.
 
+##### hop 안에서의 Orthogonal Merge
+
+일단 지금까지의 전체구조 코드를 작성.
+
+```py
+loader = DataLoader(train, batch_size=125, shuffle=True, collate_fn=collate_facts)
+pooling=AttentivePooling(512) #attentive pooling
+mlp=MLP(512) #mlp
+linearprojection=LinearProjection(512,16) #Linear Projection
+
+for batch in loader:
+  input_ids=batch["input_ids"]
+  attention_mask=batch["attention_mask"]
+  facts_len=batch["facts_len"]
+
+  data=passage_embedding(input_ids) #embedding
+  data=pooling.forward(data,attention_mask) #pooling
+  data=mlp.forward(data) #mlp
+  data=linearprojection.forward(data)#linear projection
+  data_K=data[0] #K memory 
+  data_V=data[1] #Vmemory
+
+  start=0
+  for n_hop in facts_len:
+    end=start+n_hop
+
+    K=data_K[start:end]
+    V=data_V[start:end]
+
+    start=end
+
+    # 각 질문마다의 passage를 H()를 거쳐 구해준다. 
+    # 여기서 나오는 K,V를 쓰면 됨.
+  
+  break
+```
+
  
 
 
