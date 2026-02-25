@@ -336,6 +336,18 @@ class LinearProjection(nn.Module):
 
 >  hop간의 merge를 진행한 후 inject를 해야함.
 
+> merge를 할대 orthogonal merge를 해줘야하는데 여기에 선형대수 개념이 들어감. 이부분을 공부할 필요가 있음.
+
+---
+##### 선형대수 개념
+
+
+
+
+---
+
+
+
 ```py
 loader = DataLoader(train, batch_size=125, shuffle=True, collate_fn=collate_facts)
 pooling=AttentivePooling(512) #attentive pooling
