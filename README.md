@@ -181,13 +181,10 @@ def passage_embedding(data):
 ```
 > 기존 Transformer encoder의 class 그대로 사용하여 passage를 embedding해줌.
 
-> 이때 shape=(750,5,512)
 
 # STEP 2. HyperNetwork
 
 > 현재 shape => (B,T,d_model). 하지만 이걸 (B,d_model)로 바꿔줘야함.
-
-> 즉 750개의 fact가 있고 하나의 fact마다 최대 5개의 토큰이 있고 임베딩하여 d_model 임베딩한다 인데,
 
 > fact 하나당 하나의 d_model 임베딩벡터를 할당해줘야한다. 즉 (B,d_model) 로
 
@@ -335,7 +332,9 @@ class LinearProjection(nn.Module):
 
 ##### hop 안에서의 Orthogonal Merge
 
-일단 지금까지의 전체구조 코드를 작성.
+일단 지금까지의 코드를 활용하여 전체뼈대 코드 작성. <br>
+
+> 
 
 ```py
 loader = DataLoader(train, batch_size=125, shuffle=True, collate_fn=collate_facts)
