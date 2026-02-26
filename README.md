@@ -378,6 +378,11 @@ def orthogonal_merging(WF:torch.Tensor|None,Wt:torch.tensor,eps=1e-6)->torch.Ten
 
   return A.T # 입력값 차원 그대로 다시 [k,d] 로 반환하기
 ```
+<br>
+
+> Othogonal Merge를 통해 질문당 여러 hop을 대상으로 K,V 메모리 벡터를 만들었다. 
+
+> 이제 attention을 통해 모델의 레이어에 Inject를 해줘야한다. 
 
 
 ```py
