@@ -346,7 +346,7 @@ class LinearProjection(nn.Module):
 </p>
 <p align="left">
 </p>
-<em>10번 수식</em>
+<em>10,11 수식</em>
 
 ---
 
