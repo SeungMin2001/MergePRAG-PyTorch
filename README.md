@@ -342,7 +342,7 @@ class LinearProjection(nn.Module):
 ##### 선형대수 개념
 
 <p align="left">
-  <img src="assets/math1.pdf" width="350">
+  <img src="assets/math1.pdf" width="750">
 </p>
 <p align="left">
 </p>
