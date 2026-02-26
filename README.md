@@ -384,45 +384,26 @@ def orthogonal_merging(WF:torch.Tensor|None,Wt:torch.tensor,eps=1e-6)->torch.Ten
 
 > 이제 attention을 통해 모델의 레이어에 Inject를 해줘야한다. 
 
+> attention 연산
 
 ```py
-loader = DataLoader(train, batch_size=125, shuffle=True, collate_fn=collate_facts)
-pooling=AttentivePooling(512) #attentive pooling
-mlp=MLP(512) #mlp
-linearprojection=LinearProjection(512,16) #Linear Projection
+def cross_attention(Q,K,V,head=8):
 
-for batch in loader:
-  input_ids=batch["input_ids"]
-  attention_mask=batch["attention_mask"]
-  facts_len=batch["facts_len"]
+  B,q,d=Q.shape #from transformer 
+  k=K.shape[1] #k=16
+  d_k=d//head
 
-  data=passage_embedding(input_ids) #embedding
-  data=pooling.forward(data,attention_mask) #pooling
-  data=mlp.forward(data) #mlp
-  data=linearprojection.forward(data)#linear projection
-  data_K=data[0] #K memory 
-  data_V=data[1] #Vmemory
+  Q=Q.view(B,q,head,d_k).transpose(1,2) #d=>head*d_k, [B,head,q,d_k]
+  K=K.view(B,k,head,d_k).transpose(1,2)
+  V=V.view(B,k,head,d_k).transpose(1,2)
 
-  start=0
-  for n_hop in facts_len:
-    end=start+n_hop
+  attention=(Q@K.transpose(2,3))//(math.sqrt(d_k))
+  attention=torch.softmax(attention,dim=-1)@V
 
-    K=data_K[start:end]
-    V=data_V[start:end]
+  out=attention.transppose(1,2).contiguous().view(B,q,d)
 
-    start=end
-
-    # 각 질문마다의 passage를 H()를 거쳐 구해준다. 
-    # 여기서 나오는 K,V를 쓰면 됨.
-  
-  break
+  return out
 ```
 
+> 이제 모델에 hook을 걸어서 inject 해주면 된다.
 
-
- 
-
-
-
-
-... ing
