@@ -405,8 +405,6 @@ def cross_attention(Q,K,V,head=8):
   return out
 ```
 
-> 이제 모델에 hook을 걸어서 inject 해주면 된다.
-
 > 이제 모델에 레이어에 주입해본 뒤 가장 성능이 잘나오는 레이어에 직접 Inject를 해주면 된다.
 
 > 자체적으로 만든 transformer로 진행하려 했으나, 허깅페이스에서 직접 모델을 다운받아서 진행하려고 한다.
