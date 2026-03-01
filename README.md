@@ -424,3 +424,7 @@ for name, p in model.named_parameters():
 
 > hook을 만들어줘야함. hook은 특정 레이어의 forward가 끝났을때 출력을 받아서 수정한 다음 반환하게 해준다.
 
+> base_model 차원은 [285, 120, 896], HyperNetwork 출력 차원은 [125,16,512]. <br>
+> 즉 inject를 하려면 마지막 차원을 맞춰줘야한다.
+
+
