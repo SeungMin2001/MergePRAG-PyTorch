@@ -339,7 +339,6 @@ class LinearProjection(nn.Module):
 > merge를 할대 orthogonal merge를 해줘야하는데 여기에 선형대수 개념이 들어감. 이부분을 공부할 필요가 있음.
 
 ---
-##### 선형대수 개념
 
 <p align="left">
   <img src="assets/math1.jpg" width="450">
