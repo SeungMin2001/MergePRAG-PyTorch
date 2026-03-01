@@ -409,3 +409,18 @@ def cross_attention(Q,K,V,head=8):
 
 > 자체적으로 만든 transformer로 진행하려 했으나, 허깅페이스에서 직접 모델을 다운받아서 진행하려고 한다.
 
+> 모델은 Qwen2-0.5B을 사용하였다.
+
+# STEP 4. Injection
+로컬로 다운받은 llm의 파라미터를 freeze 해준다.
+```py
+for p in model.parameters():
+    p.requires_grad = False #freeze
+
+for name, p in model.named_parameters():
+    if p.requires_grad:
+        print("Trainable:", name) #freeze 됬는지 확인
+```
+<br>
+> hook을 만들어줘야함. hook은 특정 레이어의 forward가 끝났을때 출력을 받아서 수정한 다음 반환하게 해준다.
+
