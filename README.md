@@ -421,5 +421,6 @@ for name, p in model.named_parameters():
         print("Trainable:", name) #freeze 됬는지 확인
 ```
 <br>
+
 > hook을 만들어줘야함. hook은 특정 레이어의 forward가 끝났을때 출력을 받아서 수정한 다음 반환하게 해준다.
 
