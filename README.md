@@ -403,4 +403,39 @@ for name, p in model.named_parameters():
 > base_model 차원은 [285, 120, 896], HyperNetwork 출력 차원은 [125,16,512]. <br>
 > 즉 inject를 하려면 마지막 차원을 맞춰줘야한다.
 
+> 다운받은 로컬 Model의 레이어 개수는 24. 따라서 24개의 레이어에 대해서 loss를 비교하여 최적의 layer을 스캐닝 해야함.
+```py
+with torch.no_grad(): #model1 => no hook
+    out1 = model(
+        input_ids=question_input_ids,
+        attention_mask=batch.get("attention_mask", None).to(model.device)
+            if batch.get("attention_mask", None) is not None else None,
+        labels=question_input_ids
+    )
+    base_loss=out1.loss.item()
+
+  val=[0.0]*24
+  for i in range(24):
+
+     target_layer=model.model.layers[i].mlp
+     handle = target_layer.register_forward_hook(make_hook(batch_K,batch_V))
+
+     with torch.no_grad(): #model2
+       out2 = model(
+           input_ids=question_input_ids,
+           attention_mask=batch.get("attention_mask", None).to(model.device)
+               if batch.get("attention_mask", None) is not None else None,
+           labels=question_input_ids
+       )
+       inj_loss=out2.loss.item()
+
+     handle.remove()
+     val[i]+=base_loss-inj_loss
+```
+
+<p align="left">
+  <img src="assets/scanning.jpg" width="450">
+</p>
+
+> 그 결과 layer8 -> 가장개선, layer 3 -> 가장 악화
 
