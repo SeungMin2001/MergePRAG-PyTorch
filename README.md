@@ -26,30 +26,6 @@ paper : https://openreview.net/forum?id=FSL1J2gmJV
 <br>
 
 # STEP 1. Preparation dataset 
-> Unlike the original paper, the base LLM used here is a basic Transformer implemented from scratch, following the architecture proposed in “Attention Is All You Need.”
-
-```py
-# 모델의 모든 파라미터 고정하기. (크리티컬 레이어 찾기위해서.)
-def freeze_model(model:nn.Module):
-  for p in model.parameters():
-    p.requires_grad=False
-  return model
-
-# MoE, hypernetwork 등 추가할때 requires_grad=true 해주셈
-
-```
-```py
-# required_grad=true인 애들만 역전파 해줘야함. 따라서 "optimize" 함수정의
-# 즉 MoE,H() 를 진행할때 required_grad=true 해주고 켜준애들만 역전파 
-def optimize(model:nn.Module):
-  trainable_params=[p for p in model.paramerters() if p.requires_grad]
-  optimizer=torch.optim.AdamW(trainable_params,lr=1e-4,weight_decay=0.01)
-```
-> 이제 Injection 해야함. 즉 내가 구현했던 Transformer에 FeedFoward에 injection 해야함.
-
-> Inject 하려면 일단 Hypernetwork 만들어야하고, 그 전에 retrieverd data도 준비해야하고, Reasoning chain도 해놔야함. 즉 전처리된 dataset과 HyperNetwork 가 있어야함
-
-> 일단 dataset 부터 준비 ㄱㄱ
 
 ```py
 from datasets import load_dataset
