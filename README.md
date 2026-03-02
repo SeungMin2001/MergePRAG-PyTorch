@@ -437,5 +437,5 @@ with torch.no_grad(): #model1 => no hook
   <img src="assets/scanning.jpg" width="450">
 </p>
 
-> 그 결과 layer8 -> 가장개선, layer 3 -> 가장 악화
+> 그 결과 layer8 -> 가장 악화, layer 3 -> 가장 개선
 
