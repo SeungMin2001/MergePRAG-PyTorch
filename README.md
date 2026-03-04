@@ -439,5 +439,8 @@ with torch.no_grad(): #model1 => no hook
 
 > 그 결과 layer8 -> 가장 악화, layer 3 -> 가장 개선
 
+> 이제 HyperNetwork를 학습시켜야한다. 전에 찾았던 critical layer, 즉 layer3에 대하여 inject하면서 HyperNetwork 학습을 진행하다.
+
+
 ### ing...
 
