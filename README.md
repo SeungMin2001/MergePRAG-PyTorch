@@ -439,3 +439,5 @@ with torch.no_grad(): #model1 => no hook
 
 > 그 결과 layer8 -> 가장 악화, layer 3 -> 가장 개선
 
+### ing...
+
