@@ -13,6 +13,32 @@ presented in the original research.
 </p>
 <em>Figure : Overview of MergePRAG for multi hop QA.</em>
 
+## Overview
+
+This repository is a study-first PyTorch implementation of the core ideas behind
+MergePRAG. The README preserves the original learning notes, while the `src/`
+directory organizes the studied concepts into runnable modules.
+
+Key study points covered here:
+
+- HotpotQA supporting fact extraction for SPt construction
+- passage encoding and attentive pooling from `[B, T, d_model]` to `[B, d_model]`
+- HyperNetwork memory generation with K/V projection
+- orthogonal merging of passage or hop memory banks
+- memory injection into a frozen base model through a forward hook
+- critical-layer scanning as an experimental step before training
+
+## Table of Contents
+
+- [Paper Reference](#paper-reference)
+- [Runnable Implementation](#runnable-implementation)
+- [Study Notes](#study-notes)
+  - [Step 1. Preparation Dataset](#step-1-preparation-dataset)
+  - [Step 2. HyperNetwork](#step-2-hypernetwork)
+  - [Step 3. Orthogonal Continual Merging Mechanism](#step-3-orthogonal-continual-merging-mechanism)
+  - [Step 4. Injection](#step-4-injection)
+  - [Current Status and Next Steps](#current-status-and-next-steps)
+
 ## Paper Reference
 
 This implementation is based on the following paper authored by the **UNIST NLP Lab**:
@@ -23,7 +49,7 @@ This implementation is based on the following paper authored by the **UNIST NLP 
 paper : https://openreview.net/forum?id=FSL1J2gmJV
 <br>
 
-## Implementation added
+## Runnable Implementation
 
 The repository now includes runnable PyTorch modules that map the study notes
 below into code.
@@ -48,7 +74,13 @@ orthogonal merge -> injection hook for a frozen base model.
 
 <br>
 
-# STEP 1. Preparation dataset 
+## Study Notes
+
+The following sections preserve the original learning notes and code snippets.
+They explain how I interpreted each part of the paper before organizing the idea
+into runnable modules.
+
+## Step 1. Preparation Dataset
 
 ```py
 from datasets import load_dataset
@@ -123,12 +155,12 @@ for k in valid:
 
 > llm을 활용하여 논리순서, 하위질문, 하위답변을 포함한 재설계된 데이터셋 구축 진행.
 
-##### find critical layer 
+### Find Critical Layer
 > 현재 critical layer를 찾으려면 inject 해보면서 변화들을 관찰할 필요가 있는데
 
 > 그럴려면 hypernetwork를 먼저 만들어줘야 가능함.
 
-##### HyperNetwork 
+### HyperNetwork
 
 <br>
 <p align="left">
@@ -181,7 +213,7 @@ def passage_embedding(data):
 > 기존 Transformer encoder의 class 그대로 사용하여 passage를 embedding해줌.
 
 
-# STEP 2. HyperNetwork
+## Step 2. HyperNetwork
 
 > 현재 shape => (B,T,d_model). 하지만 이걸 (B,d_model)로 바꿔줘야함.
 
@@ -195,7 +227,7 @@ def passage_embedding(data):
 - h₅ ∈ ℝ⁵¹²
 > 이렇게 나열해볼수 있고, 이때 이 5개의 임베딩된 토큰을 하나의 임베딩벡터로 "polling" 해주게 되면 하나의 fact의 하나의 임베딩벡터가 할당된다.
 
-### Attentive pooling
+### Attentive Pooling
 
 > 과정을 순서대로 써내려가보자면,
 
@@ -259,7 +291,9 @@ class ScoreLayer(nn.Module):
 
 > 따라서 선형변환을 통해 가중치가 반영된 벡터에서 같은축, 즉 같은 인덱스의 embedding값끼리 sum을 해줌으로써, 차원하나가 사라지는데, 그 차원이 토큰(T) 이 되는거임.
 
-##### 고로 이러한 연산의 의미는 모든 토큰이 d차원의 embedding값을 사용해 내포하고있는 의미들을 다시한번 합쳐주는것. => 하나의 passage(fact) 를 나타내는 embedding 벡터를 생성했다는 의미가 나온다는것임
+### Attentive Pooling Interpretation
+
+> 고로 이러한 연산의 의미는 모든 토큰이 d차원의 embedding값을 사용해 내포하고있는 의미들을 다시한번 합쳐주는것. => 하나의 passage(fact) 를 나타내는 embedding 벡터를 생성했다는 의미가 나온다는것임
 
 > 따라서 최종적으로 나오는 벡터 h의 차원은 B*d가 되는거임. 
 
@@ -319,7 +353,7 @@ class LinearProjection(nn.Module):
 ```
 > Attentive Pooling, MLP, Linear Projection을 순서대로 묶어주면 HyperNetwork(H())가 된다
 
-# STEP 3. Orthogonal Continual Merging Mechanism
+## Step 3. Orthogonal Continual Merging Mechanism
 
 > 이젠 hop 안에 많은 passage들을 메모리 K,V 벡터로 변환시켜줬기 때문에, 얘네들을 직교병합 해줘야함.
 
@@ -329,7 +363,7 @@ class LinearProjection(nn.Module):
 
 > hop간의 직교병합이 다 끝나면 inject 진행.
 
-##### Orthogonal Merge
+### Orthogonal Merge
 
 > 질문당 K,V 메모리를 얻을수 있고 K,V는 각각 여러 홉을 가지고있음.
 
@@ -409,7 +443,7 @@ def cross_attention(Q,K,V,head=8):
 
 > 모델은 Qwen2-0.5B을 사용하였다.
 
-# STEP 4. Injection
+## Step 4. Injection
 로컬로 다운받은 llm의 파라미터를 freeze 해준다.
 ```py
 for p in model.parameters():
@@ -462,7 +496,19 @@ with torch.no_grad(): #model1 => no hook
 
 > 그 결과 layer8 -> 가장 악화, layer 3 -> 가장 개선
 
-> 이제 HyperNetwork를 학습시켜야한다. 전에 찾았던 critical layer, 즉 layer3에 대하여 inject하면서 HyperNetwork 학습을 진행하다.
+> 이제 HyperNetwork를 학습시켜야한다. 전에 찾았던 critical layer, 즉 layer3에 대하여 inject하면서 HyperNetwork 학습을 진행한다.
 
 
-### ing...
+## Current Status and Next Steps
+
+현재 구현은 MergePRAG 전체 학습 파이프라인을 완전 재현한 단계라기보다, 논문을 이해하며 분해한 핵심 메커니즘을 코드로 검증할 수 있는 형태까지 정리한 단계이다.
+
+완성된 범위는 다음과 같다.
+
+- HotpotQA의 `supporting_facts`와 `context`를 연결하여 SPt를 구성한다.
+- Transformer encoder 출력 형태인 `[B, T, d_model]`을 attentive pooling으로 `[B, d_model]` passage embedding으로 변환한다.
+- HyperNetwork가 passage embedding을 기반으로 inject 가능한 K/V memory vector를 생성한다.
+- 여러 passage 또는 hop에서 생성된 memory를 orthogonal merge로 병합한다.
+- frozen base model의 특정 layer에 forward hook을 걸어 merged memory를 주입하는 구조를 준비한다.
+
+따라서 이 레포지토리는 `SPt construction -> HyperNetwork -> Orthogonal Merge -> Injection` 흐름을 학습하고 검증하기 위한 최소 구현으로 정리되었다. 이후 확장 방향은 layer scanning 결과를 바탕으로 layer 3에 injection을 고정하고, HyperNetwork와 injector만 학습시키면서 multi-hop QA 성능 변화를 비교하는 것이다.
