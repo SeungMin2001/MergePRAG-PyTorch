@@ -23,6 +23,29 @@ This implementation is based on the following paper authored by the **UNIST NLP 
 paper : https://openreview.net/forum?id=FSL1J2gmJV
 <br>
 
+## Implementation added
+
+The repository now includes runnable PyTorch modules that map the study notes
+below into code.
+
+- `src/mergeprag_pytorch/data.py`: builds SPt by matching HotpotQA `supporting_facts` against `context`.
+- `src/mergeprag_pytorch/hypernetwork.py`: attentive pooling, `MLP_hyp`, and K/V memory projection.
+- `src/mergeprag_pytorch/merging.py`: orthogonal merging for passage/hop memory banks.
+- `src/mergeprag_pytorch/injection.py`: memory cross-attention, a trainable injector, base-model freezing, and a forward-hook helper.
+- `examples/toy_mergeprag_flow.py`: a small end-to-end flow from SPt extraction to memory injection.
+- `tests/test_mergeprag.py`: shape and behavior checks for the core mechanisms.
+
+```bash
+pip install -e ".[dev]"
+PYTHONPATH=src python examples/toy_mergeprag_flow.py
+PYTHONPATH=src pytest -q
+```
+
+This is intentionally implemented as study-first building blocks rather than a
+full reproduction of the paper training pipeline. The current code covers the
+core path described below: SPt construction -> HyperNetwork memory creation ->
+orthogonal merge -> injection hook for a frozen base model.
+
 <br>
 
 # STEP 1. Preparation dataset 
@@ -443,4 +466,3 @@ with torch.no_grad(): #model1 => no hook
 
 
 ### ing...
-

@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mergeprag-pytorch-study"
+version = "0.1.0"
+description = "Study-first PyTorch components for MergePRAG: SPT extraction, hypernetwork memory, orthogonal merge, and injection hooks."
+requires-python = ">=3.10"
+dependencies = ["torch>=2.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
