@@ -1,67 +1,67 @@
 # MergePRAG (PyTorch)
 
 [🇰🇷 한국어](README.md) | [🇺🇸 English](README.en.md)
-> A from scratch PyTorch implementation of the Transformer based on
-the MergePRAG framework proposed in a paper by the UNIST NLP Lab.
+> UNIST NLP Lab 논문에서 제안한 MergePRAG 프레임워크를 기반으로
+> Transformer를 처음부터 구현한 PyTorch 프로젝트입니다.
 
-> This repository aims to reproduce and explore the core ideas and architecture
-presented in the original research.
+> 이 저장소는 원 연구에서 제시한 핵심 아이디어와 아키텍처를
+> 재현하고 탐구하는 것을 목표로 합니다.
 
 <br>
 <p align="left">
-  <img src="assets/MergePRAG.jpg" alt="MergePRAG Architecture" width="750">
+  <img src="assets/MergePRAG.jpg" alt="MergePRAG 아키텍처" width="750">
 </p>
 <p align="left">
 </p>
-<em>Figure : Overview of MergePRAG for multi hop QA.</em>
+<em>그림: 멀티홉 QA를 위한 MergePRAG 개요.</em>
 
-## Overview
+## 개요
 
-This repository is a study-first PyTorch implementation of the core ideas behind
-MergePRAG. The README preserves the original learning notes, while the `src/`
-directory organizes the studied concepts into runnable modules.
+이 저장소는 MergePRAG의 핵심 아이디어를 학습 중심으로 구현한 PyTorch
+프로젝트입니다. README에는 원본 학습 노트를 보존하고, `src/` 디렉터리에는
+학습한 개념을 실행 가능한 모듈로 구성했습니다.
 
-Key study points covered here:
+주요 학습 내용:
 
-- HotpotQA supporting fact extraction for SPt construction
-- passage encoding and attentive pooling from `[B, T, d_model]` to `[B, d_model]`
-- HyperNetwork memory generation with K/V projection
-- orthogonal merging of passage or hop memory banks
-- memory injection into a frozen base model through a forward hook
-- critical-layer scanning as an experimental step before training
+- SPt 구성을 위한 HotpotQA supporting fact 추출
+- `[B, T, d_model]`에서 `[B, d_model]`로 변환하는 패시지 인코딩 및 어텐티브 풀링
+- K/V 투영을 사용한 HyperNetwork 메모리 생성
+- 패시지 또는 홉 메모리 뱅크의 직교 병합
+- forward hook을 통한 동결 베이스 모델 메모리 주입
+- 학습 전 실험 단계로서의 critical layer 탐색
 
-## Table of Contents
+## 목차
 
-- [Paper Reference](#paper-reference)
-- [Runnable Implementation](#runnable-implementation)
-- [Study Notes](#study-notes)
-  - [Step 1. Preparation Dataset](#step-1-preparation-dataset)
-  - [Step 2. HyperNetwork](#step-2-hypernetwork)
-  - [Step 3. Orthogonal Continual Merging Mechanism](#step-3-orthogonal-continual-merging-mechanism)
-  - [Step 4. Injection](#step-4-injection)
-  - [Current Status and Next Steps](#current-status-and-next-steps)
+- [논문 참고 자료](#논문-참고-자료)
+- [실행 가능한 구현](#실행-가능한-구현)
+- [학습 노트](#학습-노트)
+  - [1단계. 데이터셋 준비](#1단계-데이터셋-준비)
+  - [2단계. HyperNetwork](#2단계-hypernetwork)
+  - [3단계. 직교 지속 병합 메커니즘](#3단계-직교-지속-병합-메커니즘)
+  - [4단계. 주입](#4단계-주입)
+  - [현재 상태 및 다음 단계](#현재-상태-및-다음-단계)
 
-## Paper Reference
+## 논문 참고 자료
 
-This implementation is based on the following paper authored by the **UNIST NLP Lab**:
+이 구현은 **UNIST NLP Lab**이 작성한 다음 논문을 기반으로 합니다.
 
 > **MergePRAG: Orthogonal Merging of Passage experts for Multi-hop Parametric RAG**  
-> *Submitted to the International Conference on Learning Representations (ICLR) 2026*
+> *International Conference on Learning Representations (ICLR) 2026 제출*
 
-paper : https://openreview.net/forum?id=FSL1J2gmJV
+논문: https://openreview.net/forum?id=FSL1J2gmJV
 <br>
 
-## Runnable Implementation
+## 실행 가능한 구현
 
-The repository now includes runnable PyTorch modules that map the study notes
-below into code.
+이 저장소에는 아래 학습 노트의 내용을 코드로 옮긴 실행 가능한 PyTorch
+모듈이 포함되어 있습니다.
 
-- `src/mergeprag_pytorch/data.py`: builds SPt by matching HotpotQA `supporting_facts` against `context`.
-- `src/mergeprag_pytorch/hypernetwork.py`: attentive pooling, `MLP_hyp`, and K/V memory projection.
-- `src/mergeprag_pytorch/merging.py`: orthogonal merging for passage/hop memory banks.
-- `src/mergeprag_pytorch/injection.py`: memory cross-attention, a trainable injector, base-model freezing, and a forward-hook helper.
-- `examples/toy_mergeprag_flow.py`: a small end-to-end flow from SPt extraction to memory injection.
-- `tests/test_mergeprag.py`: shape and behavior checks for the core mechanisms.
+- `src/mergeprag_pytorch/data.py`: HotpotQA `supporting_facts`와 `context`를 대조하여 SPt를 구성합니다.
+- `src/mergeprag_pytorch/hypernetwork.py`: 어텐티브 풀링, `MLP_hyp`, K/V 메모리 투영을 구현합니다.
+- `src/mergeprag_pytorch/merging.py`: 패시지/홉 메모리 뱅크의 직교 병합을 구현합니다.
+- `src/mergeprag_pytorch/injection.py`: 메모리 교차 어텐션, 학습 가능한 injector, 베이스 모델 동결 및 forward-hook 도우미를 제공합니다.
+- `examples/toy_mergeprag_flow.py`: SPt 추출부터 메모리 주입까지의 작은 전체 흐름입니다.
+- `tests/test_mergeprag.py`: 핵심 메커니즘의 형태와 동작을 검사합니다.
 
 ```bash
 pip install -e ".[dev]"
@@ -69,20 +69,20 @@ PYTHONPATH=src python examples/toy_mergeprag_flow.py
 PYTHONPATH=src pytest -q
 ```
 
-This is intentionally implemented as study-first building blocks rather than a
-full reproduction of the paper training pipeline. The current code covers the
-core path described below: SPt construction -> HyperNetwork memory creation ->
-orthogonal merge -> injection hook for a frozen base model.
+논문의 전체 학습 파이프라인을 완전히 재현하기보다 학습 중심의 구성 요소로
+의도적으로 구현했습니다. 현재 코드는 다음 핵심 흐름을 다룹니다.
+SPt 구성 -> HyperNetwork 메모리 생성 -> 직교 병합 ->
+동결 베이스 모델을 위한 주입 훅.
 
 <br>
 
-## Study Notes
+## 학습 노트
 
-The following sections preserve the original learning notes and code snippets.
-They explain how I interpreted each part of the paper before organizing the idea
-into runnable modules.
+다음 섹션에는 원본 학습 노트와 코드 조각을 보존했습니다.
+아이디어를 실행 가능한 모듈로 구성하기 전에 논문의 각 부분을 어떻게
+해석했는지 설명합니다.
 
-## Step 1. Preparation Dataset
+## 1단계. 데이터셋 준비
 
 ```py
 from datasets import load_dataset
@@ -157,7 +157,7 @@ for k in valid:
 
 > llm을 활용하여 논리순서, 하위질문, 하위답변을 포함한 재설계된 데이터셋 구축 진행.
 
-### Find Critical Layer
+### Critical Layer 찾기
 > 현재 critical layer를 찾으려면 inject 해보면서 변화들을 관찰할 필요가 있는데
 
 > 그럴려면 hypernetwork를 먼저 만들어줘야 가능함.
@@ -166,12 +166,12 @@ for k in valid:
 
 <br>
 <p align="left">
-  <img src="assets/HyperNetwork.jpg" alt="HyperNetwork Architecture" width="750">
+  <img src="assets/HyperNetwork.jpg" alt="HyperNetwork 아키텍처" width="750">
 </p>
 <p align="left">
 </p>
 
-<em>Figure : Overview of HyperNetwork Architecture.</em> 
+<em>그림: HyperNetwork 아키텍처 개요.</em>
 
 <br>
 
@@ -215,7 +215,7 @@ def passage_embedding(data):
 > 기존 Transformer encoder의 class 그대로 사용하여 passage를 embedding해줌.
 
 
-## Step 2. HyperNetwork
+## 2단계. HyperNetwork
 
 > 현재 shape => (B,T,d_model). 하지만 이걸 (B,d_model)로 바꿔줘야함.
 
@@ -229,7 +229,7 @@ def passage_embedding(data):
 - h₅ ∈ ℝ⁵¹²
 > 이렇게 나열해볼수 있고, 이때 이 5개의 임베딩된 토큰을 하나의 임베딩벡터로 "polling" 해주게 되면 하나의 fact의 하나의 임베딩벡터가 할당된다.
 
-### Attentive Pooling
+### 어텐티브 풀링
 
 > 과정을 순서대로 써내려가보자면,
 
@@ -293,7 +293,7 @@ class ScoreLayer(nn.Module):
 
 > 따라서 선형변환을 통해 가중치가 반영된 벡터에서 같은축, 즉 같은 인덱스의 embedding값끼리 sum을 해줌으로써, 차원하나가 사라지는데, 그 차원이 토큰(T) 이 되는거임.
 
-### Attentive Pooling Interpretation
+### 어텐티브 풀링 해석
 
 > 고로 이러한 연산의 의미는 모든 토큰이 d차원의 embedding값을 사용해 내포하고있는 의미들을 다시한번 합쳐주는것. => 하나의 passage(fact) 를 나타내는 embedding 벡터를 생성했다는 의미가 나온다는것임
 
@@ -332,14 +332,14 @@ class MLP(nn.Module):
 
 <br>
 <p align="left">
-  <img src="assets/Table8.jpg" alt="Ablation on the Number of Passage Vectors numkv" width="750">
+  <img src="assets/Table8.jpg" alt="패시지 벡터 개수 numkv에 대한 절제 실험" width="750">
 </p>
 <p align="left">
 </p>
-<em>Table 8: Ablation on the Number of Passage Vectors numkv.</em>
+<em>표 8: 패시지 벡터 개수 numkv에 대한 절제 실험.</em>
 <br>
 
-> Linear Projection code 
+> 선형 투영 코드
 ```py
 class LinearProjection(nn.Module):
   def __init__(self,d_model,k):
@@ -355,7 +355,7 @@ class LinearProjection(nn.Module):
 ```
 > Attentive Pooling, MLP, Linear Projection을 순서대로 묶어주면 HyperNetwork(H())가 된다
 
-## Step 3. Orthogonal Continual Merging Mechanism
+## 3단계. 직교 지속 병합 메커니즘
 
 > 이젠 hop 안에 많은 passage들을 메모리 K,V 벡터로 변환시켜줬기 때문에, 얘네들을 직교병합 해줘야함.
 
@@ -365,7 +365,7 @@ class LinearProjection(nn.Module):
 
 > hop간의 직교병합이 다 끝나면 inject 진행.
 
-### Orthogonal Merge
+### 직교 병합
 
 > 질문당 K,V 메모리를 얻을수 있고 K,V는 각각 여러 홉을 가지고있음.
 
@@ -445,7 +445,7 @@ def cross_attention(Q,K,V,head=8):
 
 > 모델은 Qwen2-0.5B을 사용하였다.
 
-## Step 4. Injection
+## 4단계. 주입
 로컬로 다운받은 llm의 파라미터를 freeze 해준다.
 ```py
 for p in model.parameters():
@@ -501,7 +501,7 @@ with torch.no_grad(): #model1 => no hook
 > 이제 HyperNetwork를 학습시켜야한다. 전에 찾았던 critical layer, 즉 layer3에 대하여 inject하면서 HyperNetwork 학습을 진행한다.
 
 
-## Current Status and Next Steps
+## 현재 상태 및 다음 단계
 
 현재 구현은 MergePRAG 전체 학습 파이프라인을 완전 재현한 단계라기보다, 논문을 이해하며 분해한 핵심 메커니즘을 코드로 검증할 수 있는 형태까지 정리한 단계이다.
 
